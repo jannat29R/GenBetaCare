@@ -16,7 +16,7 @@ export default function Products() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
 
-  const API = "http://localhost:5000/api/products";
+  const API = `${import.meta.env.VITE_API_URL}/api/products`;
 
   // =========================
   // GET PRODUCTS

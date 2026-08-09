@@ -27,17 +27,9 @@ export default function Dashboard() {
         messagesRes
       ] = await Promise.all([
 
-        axios.get(
-          "http://localhost:5000/api/products"
-        ),
-
-        axios.get(
-          "http://localhost:5000/api/orders"
-        ),
-
-        axios.get(
-          "http://localhost:5000/api/contact"
-        )
+        axios.get(`${import.meta.env.VITE_API_URL}/api/products`),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/orders`),
+        axios.get(`${import.meta.env.VITE_API_URL}/api/contact`)
 
       ]);
 

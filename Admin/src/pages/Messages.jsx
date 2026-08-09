@@ -18,9 +18,7 @@ export default function Messages() {
 
     try {
 
-      const res = await axios.get(
-        "http://localhost:5000/api/contact"
-      );
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/contact`);
 
       setMessages(res.data.messages);
 
@@ -66,8 +64,7 @@ export default function Messages() {
     try {
 
       await axios.delete(
-        `http://localhost:5000/api/contact/${id}`
-      );
+  `${import.meta.env.VITE_API_URL}/api/contact/${id}`);
 
       setMessages((prevMessages) =>
         prevMessages.filter(

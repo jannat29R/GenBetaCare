@@ -23,9 +23,7 @@ export default function Orders() {
 
   try {
 
-    const res = await axios.get(
-      "http://localhost:5000/api/orders"
-    );
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders`);
 
     const allOrders =
       res.data.orders || [];
@@ -90,8 +88,7 @@ export default function Orders() {
     try {
 
       await axios.delete(
-        `http://localhost:5000/api/orders/${id}`
-      );
+  `${import.meta.env.VITE_API_URL}/api/orders/${id}`);
 
 
       setOrders((prev) =>
@@ -127,9 +124,8 @@ export default function Orders() {
       try {
 
         await axios.put(
-          `http://localhost:5000/api/orders/${id}`,
-          { status }
-        );
+  `${import.meta.env.VITE_API_URL}/api/orders/${id}`,
+  { status });
 
         // Remove from active order list
         setOrders((prev) =>
