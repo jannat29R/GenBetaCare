@@ -28,6 +28,7 @@ export default function CheckoutPage() {
     const checkoutItems =
       JSON.parse(localStorage.getItem("checkoutItems")) || [];
 
+    // Only load products that were newly selected from cart
     setProducts(checkoutItems);
   }, []);
 
@@ -71,8 +72,7 @@ export default function CheckoutPage() {
 
   const subtotal = products.reduce(
     (sum, product) =>
-      sum +
-      Number(product.price) * (product.quantity || 1),
+      sum + Number(product.price) * (product.quantity || 1),
     0
   );
 
@@ -103,22 +103,26 @@ export default function CheckoutPage() {
   const handleConfirmOrder = async (e) => {
     e.preventDefault();
 
+    // No products
     if (products.length === 0) {
       alert("No products selected for checkout.");
+      navigate("/cart");
       return;
     }
 
+    // Validate customer information
     if (
-      !customer.name ||
-      !customer.phone ||
+      !customer.name.trim() ||
+      !customer.phone.trim() ||
       !customer.area ||
-      !customer.address
+      !customer.address.trim()
     ) {
       alert("Please fill in all information.");
       return;
     }
 
-    if (customer.phone.length < 11) {
+    // Phone validation
+    if (customer.phone.trim().length < 11) {
       alert("Please enter a valid phone number.");
       return;
     }
@@ -149,9 +153,18 @@ export default function CheckoutPage() {
         status: "Pending",
       };
 
+      // =========================
+      // SEND ORDER TO BACKEND
+      // =========================
+
       const res = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/orders`,
-      orderData);
+        `${import.meta.env.VITE_API_URL}/api/orders`,
+        orderData
+      );
+
+      // =========================
+      // ORDER SUCCESS
+      // =========================
 
       if (res.data.success) {
         setOrderId(newOrderId);
@@ -161,13 +174,15 @@ export default function CheckoutPage() {
         // SAVE LATEST ORDER
         // =========================
 
-        localStorage.setItem(
-          "latestOrder",
-          JSON.stringify(res.data.order)
-        );
+        if (res.data.order) {
+          localStorage.setItem(
+            "latestOrder",
+            JSON.stringify(res.data.order)
+          );
+        }
 
         // =========================
-        // REMOVE PURCHASED ITEMS
+        // REMOVE PURCHASED PRODUCTS
         // FROM CART
         // =========================
 
@@ -177,9 +192,11 @@ export default function CheckoutPage() {
         let updatedCart = [...currentCart];
 
         products.forEach((checkoutProduct) => {
-          const cartProductIndex = updatedCart.findIndex(
-            (item) => item._id === checkoutProduct._id
-          );
+          const cartProductIndex =
+            updatedCart.findIndex(
+              (item) =>
+                item._id === checkoutProduct._id
+            );
 
           if (cartProductIndex !== -1) {
             const checkoutQuantity =
@@ -192,8 +209,11 @@ export default function CheckoutPage() {
               cartQuantity - checkoutQuantity;
 
             if (remainingQuantity <= 0) {
-              // Remove completely
-              updatedCart.splice(cartProductIndex, 1);
+              // Remove product completely
+              updatedCart.splice(
+                cartProductIndex,
+                1
+              );
             } else {
               // Keep remaining quantity
               updatedCart[cartProductIndex] = {
@@ -204,20 +224,27 @@ export default function CheckoutPage() {
           }
         });
 
+        // Save updated cart
         localStorage.setItem(
           "cart",
           JSON.stringify(updatedCart)
         );
 
         // =========================
-        // IMPORTANT
+        // VERY IMPORTANT
         // CLEAR CHECKOUT ITEMS
         // =========================
 
         localStorage.removeItem("checkoutItems");
+
+        // Also clear current checkout state
+        setProducts([]);
       }
     } catch (error) {
-      console.log(error);
+      console.log(
+        "Order error:",
+        error
+      );
 
       alert(
         error.response?.data?.message ||
@@ -233,18 +260,19 @@ export default function CheckoutPage() {
   if (products.length === 0 && !orderConfirmed) {
     return (
       <div className="checkout-page">
-        <div className="checkout-empty">
+        <div className="empty-checkout">
           <h2>No Products Selected</h2>
 
           <p>
-            Please select your products.
+            Please select products from your cart
+            before checkout.
           </p>
 
           <button
-            onClick={() => navigate("/products")}
+            onClick={() => navigate("/cart")}
             className="confirm-order-btn"
           >
-            Products Page
+            Go to Cart
           </button>
         </div>
       </div>
@@ -357,7 +385,7 @@ export default function CheckoutPage() {
           </p>
         </div>
 
-        {/* DOWNLOAD */}
+        {/* PRINT */}
 
         <button
           className="download-btn"
@@ -374,6 +402,7 @@ export default function CheckoutPage() {
         >
           Back to Home
         </button>
+
       </div>
     );
   }
@@ -573,7 +602,9 @@ export default function CheckoutPage() {
           </div>
 
         </div>
+
       </div>
+
     </div>
   );
 }
