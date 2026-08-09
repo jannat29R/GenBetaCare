@@ -5,7 +5,7 @@
 .products-page {
     margin-left: 250px;
     width: calc(100% - 250px);
-    width: 800px;
+    width: 1000px;
     min-height: 100vh;
 
     padding: 40px;
