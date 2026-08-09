@@ -54,10 +54,6 @@ export default function AppRoutes() {
             path="messages"
             element={<Messages />}
           />
-
-        </Route>
-
-
       </Routes>
 
     </BrowserRouter>
