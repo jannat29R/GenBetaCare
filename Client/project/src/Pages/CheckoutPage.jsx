@@ -25,12 +25,32 @@ export default function CheckoutPage() {
   // =========================
 
   useEffect(() => {
-    const checkoutItems =
-      JSON.parse(localStorage.getItem("checkoutItems")) || [];
+  const savedItems = localStorage.getItem("checkoutItems");
 
-    // Only load products that were newly selected from cart
-    setProducts(checkoutItems);
-  }, []);
+  if (!savedItems) {
+    setProducts([]);
+    return;
+  }
+
+  try {
+    const parsedItems = JSON.parse(savedItems);
+
+    if (
+      Array.isArray(parsedItems) &&
+      parsedItems.length > 0
+    ) {
+      setProducts(parsedItems);
+    } else {
+      setProducts([]);
+      localStorage.removeItem("checkoutItems");
+    }
+  } catch (error) {
+    console.log("Checkout data error:", error);
+
+    setProducts([]);
+    localStorage.removeItem("checkoutItems");
+  }
+}, []);
 
   // =========================
   // HANDLE INPUT
