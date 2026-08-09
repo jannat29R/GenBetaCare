@@ -184,58 +184,51 @@ export default function CartPage() {
 
 
   // =========================
-  // CHECKOUT
-  // =========================
+// CHECKOUT
+// =========================
 
-  const handleCheckout = () => {
+const handleCheckout = () => {
 
-    if (selectedItems.length === 0) {
+  // No selected product
+  if (selectedItems.length === 0) {
+    alert("Please select at least one product.");
+    return;
+  }
 
-      alert(
-        "Please select at least one product."
-      );
+  // Get currently selected products
+  const selectedProducts = cart.filter((product) =>
+    selectedItems.includes(product._id)
+  );
 
-      return;
+  // No product found
+  if (selectedProducts.length === 0) {
+    alert("No products selected.");
+    return;
+  }
 
-    }
+  // Check stock
+  const outOfStock = selectedProducts.some(
+    (product) => !product.stock
+  );
 
+  if (outOfStock) {
+    alert("Some selected products are out of stock.");
+    return;
+  }
 
-    // Check stock
+  // IMPORTANT:
+  // Remove any old checkout data first
+  localStorage.removeItem("checkoutItems");
 
-    const outOfStock =
-      selectedProducts.some(
-        (product) =>
-          !product.stock
-      );
+  // Save ONLY currently selected products
+  localStorage.setItem(
+    "checkoutItems",
+    JSON.stringify(selectedProducts)
+  );
 
-
-    if (outOfStock) {
-
-      alert(
-        "Some selected products are out of stock."
-      );
-
-      return;
-
-    }
-
-
-    // Save selected products
-
-    localStorage.setItem(
-      "checkoutItems",
-      JSON.stringify(
-        selectedProducts
-      )
-    );
-
-
-    // Go to checkout
-
-    window.location.href =
-      "/checkout";
-
-  };
+  // Go to checkout
+  window.location.href = "/checkout";
+};
 
 
   return (

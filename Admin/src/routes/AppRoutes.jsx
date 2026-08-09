@@ -8,7 +8,7 @@ import Orders from "../pages/Orders";
 import Messages from "../pages/Messages";
 import Login from "../pages/Login";
 
-import AdminProtectedRoute from "../Components/AdminProtectedRoute";
+import AdminProtectedRoute from "../components/AdminProtectedRoute";
 
 
 export default function AppRoutes() {
