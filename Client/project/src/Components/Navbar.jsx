@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import GenBetaCareLogo from "../Assets/img/GenBetaLogo.jpg";
+import Logo from "../assets/img/GenBetaLogo.jpg";
 
 import "../Components/Navbar.css";
 

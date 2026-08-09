@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Logo from "../Assets/img/GenBetaLogo.jpg";
+import Logo from "../assets/img/GenBetaLogo.jpg";
 import "../Pages/ContactPage.css";
 
 export default function ContactPage() {
