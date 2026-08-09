@@ -52,6 +52,9 @@ export default function Sidebar() {
             src={Logo}
             alt="GenBetaCare Logo"
             className="sidebar-logo-img"
+            onClick={() =>
+              window.location.href = "https://gen-beta-care-2.vercel.app/"
+          }
           />
 
           <h2 className="sidebar-logo">
