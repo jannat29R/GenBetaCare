@@ -1,0 +1,131 @@
+.product-card {
+    width: 240px;
+    max-width: 240px;
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 18px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.12);
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Product Link */
+
+.product-link {
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+
+/* Product Image */
+
+.product-image {
+    width: 100%;
+    height: 170px;
+    object-fit: contain;
+    display: block;
+    transition: 0.3s;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+
+/* Product Name */
+
+.product-name {
+    font-size: 18px;
+    margin: 15px 0 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Rating */
+
+.rating {
+    color: #f4b400;
+    margin-bottom: 10px;
+}
+
+
+/* Price */
+
+.price {
+    color: #2E8B57;
+    font-size: 21px;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+
+/* Wishlist */
+
+.wishlist-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.wishlist-btn:hover {
+    background: #ffebee;
+    transform: scale(1.15);
+}
+
+
+/* Cart */
+
+.cart-btn {
+    width: 100%;
+    margin-top: 18px;
+    background: #2E8B57;
+    color: white;
+    border: none;
+    padding: 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.cart-btn:hover {
+    background: #256f46;
+    letter-spacing: 1px;
+}
+
+.cart-btn:active {
+    transform: scale(0.98);
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .product-card {
+        width: 100%;
+        max-width: 240px;
+        margin: auto;
+    }
+
+}

@@ -1,0 +1,279 @@
+/* =========================
+   MESSAGES PAGE
+========================= */
+
+.messages-page {
+    margin-left: 250px;
+
+    width: calc(100% - 250px);
+
+    min-height: 100vh;
+
+    padding: 40px;
+
+    box-sizing: border-box;
+
+    background: #fff8ee;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.messages-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.messages-header h1 {
+    margin: 0;
+
+    color: #2e8b57;
+
+    font-size: 28px;
+}
+
+
+.messages-header span {
+    color: #777;
+
+    font-size: 15px;
+}
+
+
+/* =========================
+   TABLE CONTAINER
+========================= */
+
+.messages-table-container {
+    width: 100%;
+
+    background: white;
+
+    border-radius: 12px;
+
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.messages-table {
+    width: 100%;
+
+    min-width: 750px;
+
+    border-collapse: collapse;
+}
+
+
+.messages-table th {
+    background: #2e8b57;
+
+    color: white;
+
+    padding: 14px;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+}
+
+
+.messages-table td {
+    padding: 14px;
+
+    border-bottom: 1px solid #eee;
+
+    vertical-align: top;
+
+    font-size: 14px;
+}
+
+
+.messages-table tbody tr:hover {
+    background: #faf6ef;
+}
+
+
+/* =========================
+   TEXT
+========================= */
+
+.message-name {
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+.message-email {
+    color: #2e8b57;
+
+    word-break: break-word;
+}
+
+
+.message-text {
+    max-width: 350px;
+
+    line-height: 1.5;
+
+    word-break: break-word;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.reply-message-btn,
+.delete-message-btn {
+    border: none;
+
+    padding: 9px 11px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    margin-right: 7px;
+}
+
+
+.reply-message-btn {
+    background: #2e8b57;
+
+    color: white;
+}
+
+
+.reply-message-btn:hover {
+    background: #246f46;
+}
+
+
+.delete-message-btn {
+    background: #dc3545;
+
+    color: white;
+}
+
+
+.delete-message-btn:hover {
+    background: #b52a37;
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.messages-loading,
+.no-messages {
+    text-align: center;
+
+    padding: 80px 20px;
+
+    color: #777;
+
+    font-size: 18px;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1020px) {
+
+    .messages-page {
+        margin-left: 0;
+
+        width: 100%;
+
+        padding: 40px 25px;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .messages-page {
+        padding: 30px 20px;
+    }
+
+
+    .messages-header h1 {
+        font-size: 25px;
+    }
+
+
+    .messages-table-container {
+        border-radius: 10px;
+    }
+
+
+    .messages-table {
+        min-width: 700px;
+    }
+}
+
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media (max-width: 480px) {
+
+    .messages-page {
+        padding: 25px 15px;
+    }
+
+
+    .messages-header {
+        margin-bottom: 20px;
+    }
+
+
+    .messages-header h1 {
+        font-size: 23px;
+    }
+
+
+    .messages-table th,
+    .messages-table td {
+        padding: 11px 10px;
+
+        font-size: 13px;
+    }
+
+
+    .messages-table {
+        min-width: 500px;
+    }
+}

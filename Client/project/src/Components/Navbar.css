@@ -1,0 +1,209 @@
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: #dfb985;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.logo img:hover {
+  transform: scale(1.08);
+}
+
+.logo h2 {
+  margin: 0;
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: black;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+/* Hover Animation */
+.nav-links a:hover {
+  background: rgb(96, 40, 17);
+  color: #fafafa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,.15);
+}
+
+/* =========================
+   MOBILE MENU
+   ========================= */
+
+.mobile-menu-btn {
+    display: none;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 1020px) {
+
+    .navbar {
+        padding: 10px 25px !important;
+        width: 100%;
+        box-sizing: border-box;
+
+        position: relative;
+    }
+
+
+    /* Logo */
+
+    .logo {
+        gap: 0 !important;
+    }
+
+    .logo img {
+        width: 48px !important;
+        height: 48px !important;
+    }
+
+
+    /* Hide GenBetaCare text */
+
+    .logo h2 {
+        display: none;
+    }
+
+
+    /* Hide desktop links */
+
+    .nav-links {
+        display: none;
+    }
+
+
+    /* 3 dots */
+
+    .mobile-menu-btn {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 40px;
+        height: 40px;
+
+        margin-left: auto;
+
+        border: none;
+        background: transparent;
+
+        color: #222;
+
+        font-size: 30px;
+        font-weight: bold;
+
+        cursor: pointer;
+    }
+
+
+    /* Mobile menu */
+
+    .mobile-menu {
+        position: absolute;
+
+        top: 68px;
+        right: 20px;
+
+        width: 200px;
+
+        background: #dfb985;
+
+        padding: 10px;
+
+        border-radius: 10px;
+
+        display: flex;
+        flex-direction: column;
+
+        gap: 5px;
+
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+
+        z-index: 9999;
+    }
+
+
+    .mobile-menu a {
+        text-decoration: none;
+
+        color: #222;
+
+        padding: 12px 15px;
+
+        border-radius: 7px;
+
+        font-size: 16px;
+    }
+
+
+    .mobile-menu a:hover {
+        background: white;
+    }
+
+}
+
+
+/* =========================
+   SMALL PHONE
+   ========================= */
+
+@media (max-width: 480px) {
+
+    .navbar {
+        padding: 8px 22px !important;
+    }
+
+
+    .logo img {
+        width: 42px !important;
+        height: 42px !important;
+    }
+
+
+    .mobile-menu-btn {
+        width: 36px;
+        height: 36px;
+
+        font-size: 28px;
+    }
+
+
+    .mobile-menu {
+        top: 60px;
+        right: 15px;
+        width: 185px;
+    }
+
+}

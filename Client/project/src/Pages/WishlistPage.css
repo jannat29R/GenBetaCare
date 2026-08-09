@@ -1,0 +1,333 @@
+.wishlist-page {
+  width: 90%;
+  margin: 40px auto;
+  min-height: 500px;
+}
+
+.wishlist-page h1 {
+  text-align: center;
+  color: #2e8b57;
+  margin-bottom: 35px;
+}
+
+
+/* =========================
+   WISHLIST LIST
+========================= */
+
+.wishlist-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+/* =========================
+   EACH WISHLIST ROW
+========================= */
+
+.wishlist-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background: white;
+  padding: 15px 20px;
+
+  border-radius: 12px;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.wishlist-select {
+  width: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.wishlist-select input {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+
+/* =========================
+   PRODUCT IMAGE
+========================= */
+
+.wishlist-image {
+  width: 90px;
+  height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wishlist-image img {
+  width: 80px;
+  height: 80px;
+
+  object-fit: contain;
+}
+
+
+/* =========================
+   NAME + STOCK
+========================= */
+
+.wishlist-info {
+  flex: 1;
+  min-width: 180px;
+}
+
+.wishlist-info h3 {
+  margin: 0 0 7px;
+  font-size: 18px;
+}
+
+.wishlist-info p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.in-stock {
+  color: #2e8b57;
+}
+
+.out-stock {
+  color: red;
+}
+
+
+/* =========================
+   PRICE
+========================= */
+
+.wishlist-price {
+  width: 100px;
+
+  color: #2e8b57;
+
+  font-size: 18px;
+  font-weight: bold;
+
+  text-align: center;
+}
+
+
+/* =========================
+   QUANTITY
+========================= */
+
+.quantity-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  border: 1px solid #ddd;
+  border-radius: 7px;
+
+  padding: 4px 8px;
+}
+
+.quantity-box button {
+  width: 28px;
+  height: 28px;
+
+  border: none;
+  border-radius: 5px;
+
+  background: #f1f1f1;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-box button:hover {
+  background: #ddd;
+}
+
+.quantity-box button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.quantity-box span {
+  min-width: 20px;
+  text-align: center;
+  font-weight: bold;
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.wishlist-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.wishlist-cart-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  padding: 10px 15px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #2e8b57;
+  color: white;
+
+  cursor: pointer;
+}
+
+.wishlist-cart-btn:hover {
+  background: #246f46;
+}
+
+.wishlist-cart-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+
+/* Delete button */
+
+.wishlist-remove-btn {
+  width: 42px;
+  height: 42px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #ffe5e5;
+  color: red;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wishlist-remove-btn:hover {
+  background: #ffcccc;
+}
+
+
+/* =========================
+   TOTAL SECTION
+========================= */
+
+.wishlist-total {
+  margin-top: 25px;
+
+  padding: 20px 25px;
+
+  background: white;
+
+  border-radius: 12px;
+
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wishlist-total span {
+  margin-right: 10px;
+  color: #555;
+}
+
+.wishlist-total strong {
+  color: #2e8b57;
+}
+
+.total-amount {
+  font-size: 22px;
+  font-weight: bold;
+  color: #2e8b57;
+}
+
+
+/* =========================
+   EMPTY WISHLIST
+========================= */
+
+.empty-wishlist {
+  text-align: center;
+  margin-top: 100px;
+  color: #777;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .wishlist-row {
+    flex-wrap: wrap;
+  }
+
+  .wishlist-info {
+    min-width: 200px;
+  }
+
+  .wishlist-actions {
+    margin-left: auto;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .wishlist-page {
+    width: 95%;
+  }
+
+  .wishlist-row {
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .wishlist-image {
+    width: 70px;
+    height: 70px;
+  }
+
+  .wishlist-image img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .wishlist-price {
+    width: auto;
+  }
+
+  .wishlist-total {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}

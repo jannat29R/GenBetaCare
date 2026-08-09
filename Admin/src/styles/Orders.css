@@ -1,0 +1,379 @@
+/* =========================
+   ORDERS PAGE
+========================= */
+
+.orders-page {
+    margin-left: 250px;
+
+    width: calc(100% - 250px);
+    width: 800px;
+
+    min-height: 100vh;
+
+    padding: 40px;
+
+    box-sizing: border-box;
+
+    background: #fff8ee;
+}
+
+
+/* =========================
+   TABLE CONTAINER
+========================= */
+
+.orders-table-container {
+    width: 100%;
+
+    max-width: 100%;
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+}
+
+
+/* =========================
+   ORDERS TABLE
+========================= */
+
+.orders-table {
+    width: 1100px;
+
+    min-width: 1100px;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+
+/* =========================
+   COLUMN WIDTHS
+========================= */
+
+.orders-table th:nth-child(1),
+.orders-table td:nth-child(1) {
+    width: 100px;
+}
+
+
+.orders-table th:nth-child(2),
+.orders-table td:nth-child(2) {
+    width: 110px;
+}
+
+
+.orders-table th:nth-child(3),
+.orders-table td:nth-child(3) {
+    width: 130px;
+}
+
+
+.orders-table th:nth-child(4),
+.orders-table td:nth-child(4) {
+    width: 120px;
+}
+
+
+.orders-table th:nth-child(5),
+.orders-table td:nth-child(5) {
+    width: 220px;
+}
+
+
+.orders-table th:nth-child(6),
+.orders-table td:nth-child(6) {
+    width: 100px;
+}
+
+
+.orders-table th:nth-child(7),
+.orders-table td:nth-child(7) {
+    width: 130px;
+}
+
+
+.orders-table th:nth-child(8),
+.orders-table td:nth-child(8) {
+    width: 120px;
+}
+
+
+.orders-table th:nth-child(9),
+.orders-table td:nth-child(9) {
+    width: 70px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.orders-table th {
+    background: #dfb985;
+
+    color: #222;
+
+    padding: 16px 12px;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.orders-table td {
+    padding: 14px 12px;
+
+    border-bottom: 1px solid #eee;
+
+    vertical-align: middle;
+
+    font-size: 14px;
+
+    overflow: hidden;
+}
+
+
+.orders-table tbody tr:hover {
+    background: #faf6ef;
+}
+
+
+/* =========================
+   ORDER ID
+========================= */
+
+.order-id-cell {
+    font-weight: bold;
+
+    color: #2e8b57;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   PRODUCTS
+========================= */
+
+.order-products {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+
+.order-product {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+
+.order-product img {
+    width: 40px;
+
+    height: 40px;
+
+    object-fit: contain;
+
+    border-radius: 6px;
+
+    flex-shrink: 0;
+}
+
+
+.order-product span {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   TOTAL
+========================= */
+
+.order-total {
+    font-weight: bold;
+
+    color: #2e8b57;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   PAYMENT
+========================= */
+
+.orders-table td:nth-child(7) {
+    white-space: normal;
+
+    line-height: 1.4;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status-select {
+    width: 110px;
+
+    padding: 8px 10px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    outline: none;
+}
+
+
+.status-select.pending {
+    background: #fff3cd;
+
+    color: #856404;
+}
+
+
+.status-select.delivered {
+    background: #d4edda;
+
+    color: #155724;
+}
+
+
+/* =========================
+   DELETE
+========================= */
+
+.delete-order-btn {
+    border: none;
+
+    background: #dc3545;
+
+    color: white;
+
+    width: 36px;
+
+    height: 36px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin: auto;
+}
+
+
+.delete-order-btn:hover {
+    background: #b52a37;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1020px) {
+
+    .orders-page {
+        margin-left: 0;
+
+        width:800px;;
+
+        padding: 40px 25px;
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+
+    .orders-page {
+        padding: 30px 20px;
+    }
+
+
+    .orders-table-container {
+        padding: 15px;
+    }
+
+
+    /*
+       Table stays wide.
+       Only table scrolls horizontally.
+    */
+
+    .orders-table {
+        min-width: 1100px;
+    }
+}
+
+
+/* =========================
+   SMALL PHONE
+========================= */
+
+@media (max-width: 480px) {
+
+    .orders-page {
+        padding: 25px 15px;
+    }
+
+
+    .orders-table-container {
+        padding: 12px;
+
+        border-radius: 10px;
+    }
+
+
+    .orders-table {
+        min-width: 1100px;
+    }
+}

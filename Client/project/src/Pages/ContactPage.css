@@ -1,0 +1,149 @@
+.contact-page {
+  width: 90%;
+  margin: 50px auto;
+}
+
+.contact-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* LEFT INFO */
+
+.contact-info {
+  width: 30%;
+}
+
+.contact-info h1 {
+  color: #2e8b57;
+  font-size: 38px;
+  margin-bottom: 20px;
+}
+
+.contact-info p {
+  color: #555;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* FORM */
+
+.contact-form-box {
+  width: 400px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+}
+
+.contact-form-box h2 {
+  color: #2e8b57;
+  margin-bottom: 25px;
+}
+
+/* FIELD */
+
+.contact-field {
+  margin-bottom: 18px;
+}
+
+.contact-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-weight: 600;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 15px;
+  outline: none;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  border-color: #2e8b57;
+}
+
+.contact-field textarea {
+  resize: vertical;
+}
+
+/* BUTTON */
+
+.contact-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 7px;
+  background: #2e8b57;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.contact-submit-btn:hover {
+  background: #246f46;
+}
+
+.contact-submit-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* MESSAGES */
+
+.contact-success {
+  color: #2e8b57;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.contact-error {
+  color: red;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* LOGO */
+
+.contact-logo {
+  width: 300px;
+  height: 300px;
+  object-fit: contain;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+  .contact-container {
+    flex-direction: column;
+    padding: 30px 10px;
+  }
+
+  .contact-info {
+    width: 100%;
+    text-align: center;
+  }
+
+  .contact-form-box {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .contact-logo {
+    width: 300px;
+    height: 300px;
+  }
+}

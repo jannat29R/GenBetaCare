@@ -1,0 +1,237 @@
+/* =========================
+   LOGIN PAGE
+========================= */
+
+.login-page {
+    min-height: 100vh;
+    width: 100%;
+    background: #fff8ee;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   LOGIN FORM
+========================= */
+
+.login-form {
+    width: 400px;
+    max-width: 100%;
+
+    background: #f0d9af;
+
+    padding: 35px 30px;
+
+    border-radius: 18px;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+
+/* Heading */
+
+.login-form h1 {
+    text-align: center;
+
+    margin: 0 0 28px;
+
+    color: #2e8b57;
+
+    font-size: 30px;
+}
+
+
+/* =========================
+   INPUT BOX
+========================= */
+
+.box {
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    padding: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* Label */
+
+.box label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #333;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    text-align: left;
+}
+
+
+/* Input */
+
+.box input {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d5c09a;
+
+    border-radius: 9px;
+
+    background: white;
+
+    font-size: 15px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition: 0.3s;
+}
+
+
+/* Input focus */
+
+.box input:focus {
+    border-color: #2e8b57;
+
+    box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.12);
+}
+
+
+/* =========================
+   LOGIN BUTTON
+========================= */
+
+.btn {
+    width: 100%;
+
+    margin-top: 10px;
+
+    padding: 0;
+
+    background: none;
+
+    box-sizing: border-box;
+}
+
+
+.btn button {
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #2e8b57;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.btn button:hover {
+    background: #256f46;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 12px rgba(46, 139, 87, 0.25);
+}
+
+
+.btn button:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================
+   FORGOT PASSWORD
+========================= */
+
+.forgotpass {
+    margin-top: 15px;
+
+    text-align: center;
+}
+
+
+.forgotpass a {
+    color: #2e8b57;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+.forgotpass a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+    .login-page {
+        padding: 18px;
+    }
+
+
+    .login-form {
+        width: 100%;
+
+        padding: 28px 22px;
+
+        border-radius: 15px;
+    }
+
+
+    .login-form h1 {
+        font-size: 26px;
+
+        margin-bottom: 24px;
+    }
+
+
+    .box input {
+        padding: 11px 12px;
+
+        font-size: 14px;
+    }
+
+
+    .btn button {
+        padding: 12px;
+
+        font-size: 15px;
+    }
+
+}
