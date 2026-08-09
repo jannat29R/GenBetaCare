@@ -51,9 +51,8 @@ export default function ContactPage() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:5000/api/contact",
-        formData
-      );
+      `${import.meta.env.VITE_API_URL}/api/contact`,
+      formData);
 
       if (res.data.success) {
         setSuccess("Your message has been sent successfully!");

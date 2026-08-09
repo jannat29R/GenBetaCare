@@ -150,9 +150,8 @@ export default function CheckoutPage() {
       };
 
       const res = await axios.post(
-        "http://localhost:5000/api/orders",
-        orderData
-      );
+      `${import.meta.env.VITE_API_URL}/api/orders`,
+      orderData);
 
       if (res.data.success) {
         setOrderId(newOrderId);

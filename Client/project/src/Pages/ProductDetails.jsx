@@ -28,9 +28,7 @@ export default function ProductDetails() {
 
       try {
 
-        const res = await axios.get(
-          "http://localhost:5000/api/products"
-        );
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/products`);
 
         const foundProduct =
           res.data.find(
