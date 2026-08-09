@@ -416,7 +416,15 @@ export default function CheckoutPage() {
   ) {
     return (
       <div className="checkout-page">
-        <div className="empty-checkout">
+       <div
+          className="empty-checkout"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <h2>
             No Products Selected
           </h2>
