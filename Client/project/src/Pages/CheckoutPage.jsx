@@ -2,12 +2,24 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import axios from "axios";
+
 import "./CheckoutPage.css";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
 
+  // =========================
+  // CHECKOUT PRODUCTS
+  // =========================
+
   const [products, setProducts] = useState([]);
+
+  // Products shown after successful order
+  const [confirmedProducts, setConfirmedProducts] = useState([]);
+
+  // =========================
+  // CUSTOMER
+  // =========================
 
   const [customer, setCustomer] = useState({
     name: "",
@@ -16,45 +28,53 @@ export default function CheckoutPage() {
     area: "",
   });
 
+  // =========================
+  // OTHER STATES
+  // =========================
+
   const [deliveryCharge, setDeliveryCharge] = useState(0);
   const [orderConfirmed, setOrderConfirmed] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  // =========================
+  // =====================================================
   // LOAD CHECKOUT PRODUCTS
-  // =========================
+  // =====================================================
 
   useEffect(() => {
-  const savedItems = localStorage.getItem("checkoutItems");
+    const savedItems = localStorage.getItem("checkoutItems");
 
-  if (!savedItems) {
-    setProducts([]);
-    return;
-  }
-
-  try {
-    const parsedItems = JSON.parse(savedItems);
-
-    if (
-      Array.isArray(parsedItems) &&
-      parsedItems.length > 0
-    ) {
-      setProducts(parsedItems);
-    } else {
+    // No checkout data
+    if (!savedItems) {
       setProducts([]);
+      return;
+    }
+
+    try {
+      const parsedItems = JSON.parse(savedItems);
+
+      if (
+        Array.isArray(parsedItems) &&
+        parsedItems.length > 0
+      ) {
+        setProducts(parsedItems);
+      } else {
+        setProducts([]);
+
+        localStorage.removeItem("checkoutItems");
+      }
+    } catch (error) {
+      console.log("Checkout data error:", error);
+
+      setProducts([]);
+
       localStorage.removeItem("checkoutItems");
     }
-  } catch (error) {
-    console.log("Checkout data error:", error);
+  }, []);
 
-    setProducts([]);
-    localStorage.removeItem("checkoutItems");
-  }
-}, []);
-
-  // =========================
+  // =====================================================
   // HANDLE INPUT
-  // =========================
+  // =====================================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,9 +85,9 @@ export default function CheckoutPage() {
     }));
   };
 
-  // =========================
+  // =====================================================
   // DELIVERY AREA
-  // =========================
+  // =====================================================
 
   const handleAreaChange = (e) => {
     const value = e.target.value;
@@ -86,25 +106,28 @@ export default function CheckoutPage() {
     }
   };
 
-  // =========================
+  // =====================================================
   // SUBTOTAL
-  // =========================
+  // =====================================================
 
   const subtotal = products.reduce(
     (sum, product) =>
-      sum + Number(product.price) * (product.quantity || 1),
+      sum +
+      Number(product.price) *
+        (product.quantity || 1),
     0
   );
 
-  // =========================
+  // =====================================================
   // GRAND TOTAL
-  // =========================
+  // =====================================================
 
-  const grandTotal = subtotal + deliveryCharge;
+  const grandTotal =
+    subtotal + deliveryCharge;
 
-  // =========================
+  // =====================================================
   // CLOSE CHECKOUT
-  // =========================
+  // =====================================================
 
   const handleCloseCheckout = () => {
     const confirmClose = window.confirm(
@@ -112,69 +135,130 @@ export default function CheckoutPage() {
     );
 
     if (confirmClose) {
+      // Cancel checkout
+      localStorage.removeItem(
+        "checkoutItems"
+      );
+
       navigate("/cart");
     }
   };
 
-  // =========================
+  // =====================================================
   // CONFIRM ORDER
-  // =========================
+  // =====================================================
 
   const handleConfirmOrder = async (e) => {
     e.preventDefault();
 
-    // No products
-    if (products.length === 0) {
-      alert("No products selected for checkout.");
-      navigate("/cart");
+    // Prevent double click
+    if (submitting) {
       return;
     }
 
-    // Validate customer information
+    // =========================
+    // NO PRODUCTS
+    // =========================
+
+    if (products.length === 0) {
+      alert(
+        "No products selected for checkout."
+      );
+
+      navigate("/cart");
+
+      return;
+    }
+
+    // =========================
+    // VALIDATION
+    // =========================
+
     if (
       !customer.name.trim() ||
       !customer.phone.trim() ||
       !customer.area ||
       !customer.address.trim()
     ) {
-      alert("Please fill in all information.");
+      alert(
+        "Please fill in all information."
+      );
+
       return;
     }
 
-    // Phone validation
-    if (customer.phone.trim().length < 11) {
-      alert("Please enter a valid phone number.");
+    // =========================
+    // PHONE VALIDATION
+    // =========================
+
+    const phone =
+      customer.phone.trim();
+
+    if (
+      phone.length < 11 ||
+      !/^[0-9]+$/.test(phone)
+    ) {
+      alert(
+        "Please enter a valid phone number."
+      );
+
       return;
     }
+
+    // =========================
+    // START SUBMIT
+    // =========================
 
     try {
+      setSubmitting(true);
+
+      // Generate order ID
       const newOrderId =
-        "GB-" + Date.now().toString().slice(-6);
+        "GB-" +
+        Date.now()
+          .toString()
+          .slice(-6);
+
+      // =========================
+      // ORDER DATA
+      // =========================
 
       const orderData = {
         orderId: newOrderId,
 
-        customer: customer,
+        customer: {
+          name: customer.name.trim(),
+          phone: customer.phone.trim(),
+          address: customer.address.trim(),
+          area: customer.area,
+        },
 
-        products: products.map((product) => ({
-          productId: product._id,
-          name: product.name,
-          image: product.image,
-          price: Number(product.price),
-          quantity: product.quantity || 1,
-        })),
+        products: products.map(
+          (product) => ({
+            productId: product._id,
+            name: product.name,
+            image: product.image,
+            price: Number(product.price),
+            quantity:
+              product.quantity || 1,
+          })
+        ),
 
         subtotal: subtotal,
-        deliveryCharge: deliveryCharge,
+
+        deliveryCharge:
+          deliveryCharge,
+
         total: grandTotal,
 
-        paymentMethod: "Cash on Delivery",
+        paymentMethod:
+          "Cash on Delivery",
 
         status: "Pending",
       };
 
       // =========================
-      // SEND ORDER TO BACKEND
+      // SEND TO BACKEND
       // =========================
 
       const res = await axios.post(
@@ -183,11 +267,19 @@ export default function CheckoutPage() {
       );
 
       // =========================
-      // ORDER SUCCESS
+      // SUCCESS
       // =========================
 
       if (res.data.success) {
+        // IMPORTANT:
+        // Save products separately
+        // for confirmation page
+        setConfirmedProducts([
+          ...products,
+        ]);
+
         setOrderId(newOrderId);
+
         setOrderConfirmed(true);
 
         // =========================
@@ -197,68 +289,107 @@ export default function CheckoutPage() {
         if (res.data.order) {
           localStorage.setItem(
             "latestOrder",
-            JSON.stringify(res.data.order)
+            JSON.stringify(
+              res.data.order
+            )
           );
         }
 
         // =========================
-        // REMOVE PURCHASED PRODUCTS
+        // REMOVE PURCHASED ITEMS
         // FROM CART
         // =========================
 
         const currentCart =
-          JSON.parse(localStorage.getItem("cart")) || [];
+          JSON.parse(
+            localStorage.getItem("cart")
+          ) || [];
 
-        let updatedCart = [...currentCart];
+        const updatedCart =
+          currentCart.filter(
+            (cartProduct) => {
+              const checkoutProduct =
+                products.find(
+                  (product) =>
+                    product._id ===
+                    cartProduct._id
+                );
 
-        products.forEach((checkoutProduct) => {
-          const cartProductIndex =
-            updatedCart.findIndex(
-              (item) =>
-                item._id === checkoutProduct._id
-            );
+              // Product wasn't purchased
+              if (!checkoutProduct) {
+                return true;
+              }
 
-          if (cartProductIndex !== -1) {
-            const checkoutQuantity =
-              checkoutProduct.quantity || 1;
+              const checkoutQuantity =
+                checkoutProduct.quantity ||
+                1;
 
-            const cartQuantity =
-              updatedCart[cartProductIndex].quantity || 1;
+              const cartQuantity =
+                cartProduct.quantity || 1;
 
-            const remainingQuantity =
-              cartQuantity - checkoutQuantity;
+              const remainingQuantity =
+                cartQuantity -
+                checkoutQuantity;
 
-            if (remainingQuantity <= 0) {
-              // Remove product completely
-              updatedCart.splice(
-                cartProductIndex,
-                1
-              );
-            } else {
-              // Keep remaining quantity
-              updatedCart[cartProductIndex] = {
-                ...updatedCart[cartProductIndex],
-                quantity: remainingQuantity,
+              // Keep only if quantity remains
+              return remainingQuantity > 0;
+            }
+          );
+
+        // =========================
+        // UPDATE REMAINING QUANTITY
+        // =========================
+
+        const finalCart =
+          updatedCart.map(
+            (cartProduct) => {
+              const checkoutProduct =
+                products.find(
+                  (product) =>
+                    product._id ===
+                    cartProduct._id
+                );
+
+              if (!checkoutProduct) {
+                return cartProduct;
+              }
+
+              const checkoutQuantity =
+                checkoutProduct.quantity ||
+                1;
+
+              const originalQuantity =
+                cartProduct.quantity ||
+                1;
+
+              return {
+                ...cartProduct,
+                quantity:
+                  originalQuantity -
+                  checkoutQuantity,
               };
             }
-          }
-        });
+          );
 
-        // Save updated cart
         localStorage.setItem(
           "cart",
-          JSON.stringify(updatedCart)
+          JSON.stringify(finalCart)
         );
 
         // =========================
         // VERY IMPORTANT
-        // CLEAR CHECKOUT ITEMS
+        // CLEAR CHECKOUT DATA
         // =========================
 
-        localStorage.removeItem("checkoutItems");
+        localStorage.removeItem(
+          "checkoutItems"
+        );
 
-        // Also clear current checkout state
-        setProducts([]);
+        // DO NOT:
+        // setProducts([])
+        //
+        // because confirmation
+        // needs the products.
       }
     } catch (error) {
       console.log(
@@ -270,26 +401,35 @@ export default function CheckoutPage() {
         error.response?.data?.message ||
           "Failed to place order. Please try again."
       );
+    } finally {
+      setSubmitting(false);
     }
   };
 
-  // =========================
+  // =====================================================
   // EMPTY CHECKOUT
-  // =========================
+  // =====================================================
 
-  if (products.length === 0 && !orderConfirmed) {
+  if (
+    products.length === 0 &&
+    !orderConfirmed
+  ) {
     return (
       <div className="checkout-page">
         <div className="empty-checkout">
-          <h2>No Products Selected</h2>
+          <h2>
+            No Products Selected
+          </h2>
 
           <p>
-            Please select products from your cart
-            before checkout.
+            Please select products from
+            your cart before checkout.
           </p>
 
           <button
-            onClick={() => navigate("/cart")}
+            onClick={() =>
+              navigate("/cart")
+            }
             className="confirm-order-btn"
           >
             Go to Cart
@@ -299,13 +439,31 @@ export default function CheckoutPage() {
     );
   }
 
-  // =========================
+  // =====================================================
   // ORDER CONFIRMED
-  // =========================
+  // =====================================================
 
   if (orderConfirmed) {
+    // Calculate confirmation subtotal
+    const confirmedSubtotal =
+      confirmedProducts.reduce(
+        (sum, product) =>
+          sum +
+          Number(product.price) *
+            (product.quantity || 1),
+        0
+      );
+
+    const confirmedGrandTotal =
+      confirmedSubtotal +
+      deliveryCharge;
+
     return (
       <div className="checkout-page">
+
+        {/* =========================
+            CONFIRMATION
+        ========================= */}
 
         <div
           className="order-confirmation"
@@ -313,43 +471,59 @@ export default function CheckoutPage() {
         >
           <FaCheckCircle className="success-icon" />
 
-          <h1>Order Confirmed!</h1>
+          <h1>
+            Order Confirmed!
+          </h1>
 
           <p className="thank-you">
-            Thank you for shopping with GenBetaCare ❤️
+            Thank you for shopping with
+            GenBetaCare ❤️
           </p>
 
           {/* ORDER ID */}
 
           <div className="order-id">
-            <strong>Order ID: </strong>
+            <strong>
+              Order ID:
+            </strong>{" "}
             {orderId}
           </div>
 
           {/* CUSTOMER */}
 
           <div className="confirmation-section">
-            <h3>Customer Information</h3>
+            <h3>
+              Customer Information
+            </h3>
 
             <p>
-              <strong>Name:</strong>{" "}
+              <strong>
+                Name:
+              </strong>{" "}
               {customer.name}
             </p>
 
             <p>
-              <strong>Phone:</strong>{" "}
+              <strong>
+                Phone:
+              </strong>{" "}
               {customer.phone}
             </p>
 
             <p>
-              <strong>Delivery:</strong>{" "}
-              {customer.area === "inside"
+              <strong>
+                Delivery:
+              </strong>{" "}
+              {customer.area ===
+              "inside"
                 ? "Inside Dhaka"
                 : "Outside Dhaka"}
             </p>
 
             <p>
-              <strong>Address:</strong>{" "}
+              <strong>
+                Address:
+              </strong>{" "}
               {customer.address}
             </p>
           </div>
@@ -357,82 +531,112 @@ export default function CheckoutPage() {
           {/* PRODUCTS */}
 
           <div className="confirmation-section">
-            <h3>Ordered Products</h3>
+            <h3>
+              Ordered Products
+            </h3>
 
-            {products.map((product) => (
-              <div
-                className="confirmation-product"
-                key={product._id}
-              >
-                <span>
-                  {product.name} ×{" "}
-                  {product.quantity || 1}
-                </span>
+            {confirmedProducts.map(
+              (product) => (
+                <div
+                  className="confirmation-product"
+                  key={product._id}
+                >
+                  <span>
+                    {product.name} ×{" "}
+                    {product.quantity || 1}
+                  </span>
 
-                <span>
-                  ৳{" "}
-                  {Number(product.price) *
-                    (product.quantity || 1)}
-                </span>
-              </div>
-            ))}
+                  <span>
+                    ৳{" "}
+                    {Number(product.price) *
+                      (product.quantity || 1)}
+                  </span>
+                </div>
+              )
+            )}
           </div>
 
           {/* BILL */}
 
           <div className="confirmation-bill">
             <div>
-              <span>Subtotal</span>
-              <span>৳ {subtotal}</span>
+              <span>
+                Subtotal
+              </span>
+
+              <span>
+                ৳ {confirmedSubtotal}
+              </span>
             </div>
 
             <div>
-              <span>Delivery Charge</span>
-              <span>৳ {deliveryCharge}</span>
+              <span>
+                Delivery Charge
+              </span>
+
+              <span>
+                ৳ {deliveryCharge}
+              </span>
             </div>
 
             <div className="grand-total">
-              <span>Total</span>
-              <span>৳ {grandTotal}</span>
+              <span>
+                Total
+              </span>
+
+              <span>
+                ৳ {confirmedGrandTotal}
+              </span>
             </div>
           </div>
 
           {/* PAYMENT */}
 
           <p className="payment-method">
-            <strong>Payment:</strong>{" "}
+            <strong>
+              Payment:
+            </strong>{" "}
             Cash on Delivery
           </p>
         </div>
 
-        {/* PRINT */}
+        {/* =========================
+            PRINT
+        ========================= */}
 
         <button
           className="download-btn"
-          onClick={() => window.print()}
+          onClick={() =>
+            window.print()
+          }
         >
           Download / Print Order
         </button>
 
-        {/* HOME */}
+        {/* =========================
+            HOME
+        ========================= */}
 
         <button
           className="download-btn"
-          onClick={() => navigate("/")}
+          onClick={() =>
+            navigate("/")
+          }
         >
           Back to Home
         </button>
-
       </div>
     );
   }
 
-  // =========================
+  // =====================================================
   // CHECKOUT FORM
-  // =========================
+  // =====================================================
 
   return (
     <div className="checkout-page">
+
+      {/* TOP BAR */}
 
       <div className="checkout-top-bar">
 
@@ -442,7 +646,9 @@ export default function CheckoutPage() {
 
         <button
           className="close-checkout-btn"
-          onClick={handleCloseCheckout}
+          onClick={
+            handleCloseCheckout
+          }
           title="Cancel Order"
         >
           <FaTimes />
@@ -450,28 +656,42 @@ export default function CheckoutPage() {
 
       </div>
 
+      {/* CONTAINER */}
+
       <div className="checkout-container">
 
         {/* =========================
-            LEFT SIDE
+            LEFT
         ========================= */}
 
         <div className="checkout-form-box">
 
-          <h2>Customer Information</h2>
+          <h2>
+            Customer Information
+          </h2>
 
-          <form onSubmit={handleConfirmOrder}>
+          <form
+            onSubmit={
+              handleConfirmOrder
+            }
+          >
 
             {/* NAME */}
 
             <div className="form-group">
-              <label>Full Name</label>
+              <label>
+                Full Name
+              </label>
 
               <input
                 type="text"
                 name="name"
-                value={customer.name}
-                onChange={handleChange}
+                value={
+                  customer.name
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="Enter your full name"
                 required
               />
@@ -480,13 +700,19 @@ export default function CheckoutPage() {
             {/* PHONE */}
 
             <div className="form-group">
-              <label>Phone Number</label>
+              <label>
+                Phone Number
+              </label>
 
               <input
                 type="tel"
                 name="phone"
-                value={customer.phone}
-                onChange={handleChange}
+                value={
+                  customer.phone
+                }
+                onChange={
+                  handleChange
+                }
                 placeholder="01XXXXXXXXX"
                 required
               />
@@ -495,11 +721,17 @@ export default function CheckoutPage() {
             {/* AREA */}
 
             <div className="form-group">
-              <label>Delivery Area</label>
+              <label>
+                Delivery Area
+              </label>
 
               <select
-                value={customer.area}
-                onChange={handleAreaChange}
+                value={
+                  customer.area
+                }
+                onChange={
+                  handleAreaChange
+                }
                 required
               >
                 <option value="">
@@ -519,12 +751,18 @@ export default function CheckoutPage() {
             {/* ADDRESS */}
 
             <div className="form-group">
-              <label>Full Address</label>
+              <label>
+                Full Address
+              </label>
 
               <textarea
                 name="address"
-                value={customer.address}
-                onChange={handleChange}
+                value={
+                  customer.address
+                }
+                onChange={
+                  handleChange
+                }
                 rows="5"
                 placeholder="House, Road, Area, District..."
                 required
@@ -535,7 +773,9 @@ export default function CheckoutPage() {
 
             <div className="payment-box">
 
-              <h3>Payment Method</h3>
+              <h3>
+                Payment Method
+              </h3>
 
               <label>
                 <input
@@ -549,54 +789,73 @@ export default function CheckoutPage() {
 
             </div>
 
+            {/* CONFIRM */}
+
             <button
               type="submit"
               className="confirm-order-btn"
+              disabled={
+                submitting
+              }
             >
-              Confirm Order
+              {submitting
+                ? "Placing Order..."
+                : "Confirm Order"}
             </button>
 
           </form>
         </div>
 
         {/* =========================
-            RIGHT SIDE
+            RIGHT
         ========================= */}
 
         <div className="order-summary-box">
 
-          <h2>Order Summary</h2>
+          <h2>
+            Order Summary
+          </h2>
 
           <div className="summary-products">
 
-            {products.map((product) => (
-              <div
-                className="summary-product"
-                key={product._id}
-              >
+            {products.map(
+              (product) => (
+                <div
+                  className="summary-product"
+                  key={product._id}
+                >
 
-                <img
-                  src={product.image}
-                  alt={product.name}
-                />
+                  <img
+                    src={product.image}
+                    alt={
+                      product.name
+                    }
+                  />
 
-                <div>
-                  <h4>{product.name}</h4>
+                  <div>
+                    <h4>
+                      {product.name}
+                    </h4>
 
-                  <p>
-                    Qty:{" "}
-                    {product.quantity || 1}
-                  </p>
+                    <p>
+                      Qty:{" "}
+                      {product.quantity ||
+                        1}
+                    </p>
+                  </div>
+
+                  <strong>
+                    ৳{" "}
+                    {Number(
+                      product.price
+                    ) *
+                      (product.quantity ||
+                        1)}
+                  </strong>
+
                 </div>
-
-                <strong>
-                  ৳{" "}
-                  {Number(product.price) *
-                    (product.quantity || 1)}
-                </strong>
-
-              </div>
-            ))}
+              )
+            )}
 
           </div>
 
@@ -605,18 +864,35 @@ export default function CheckoutPage() {
           <div className="summary-bill">
 
             <div>
-              <span>Subtotal</span>
-              <span>৳ {subtotal}</span>
+              <span>
+                Subtotal
+              </span>
+
+              <span>
+                ৳ {subtotal}
+              </span>
             </div>
 
             <div>
-              <span>Delivery</span>
-              <span>৳ {deliveryCharge}</span>
+              <span>
+                Delivery
+              </span>
+
+              <span>
+                ৳ {deliveryCharge}
+              </span>
             </div>
 
             <div className="summary-total">
-              <span>Total</span>
-              <span>৳ {grandTotal}</span>
+
+              <span>
+                Total
+              </span>
+
+              <span>
+                ৳ {grandTotal}
+              </span>
+
             </div>
 
           </div>
@@ -624,7 +900,6 @@ export default function CheckoutPage() {
         </div>
 
       </div>
-
     </div>
   );
 }
