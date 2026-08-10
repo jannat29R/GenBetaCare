@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaTimes } from "react-icons/fa";
 import axios from "axios";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 import "./CheckoutPage.css";
 
@@ -614,11 +616,44 @@ export default function CheckoutPage() {
 
         <button
           className="download-btn"
-          onClick={() =>
-            window.print()
-          }
+          onClick={async () => {
+            const invoice = document.getElementById("order-invoice");
+
+            if (!invoice) return;
+
+            try {
+              const canvas = await html2canvas(invoice, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: "#ffffff",
+              });
+
+              const imgData = canvas.toDataURL("image/png");
+
+              const pdf = new jsPDF("p", "mm", "a4");
+
+              const pdfWidth = 190;
+              const pdfHeight =
+                (canvas.height * pdfWidth) / canvas.width;
+
+              pdf.addImage(
+                imgData,
+                "PNG",
+                10,
+                10,
+                pdfWidth,
+                pdfHeight
+              );
+
+              pdf.save(`GenBetaCare-${orderId}.pdf`);
+
+            } catch (error) {
+              console.error("PDF error:", error);
+              alert("Could not download order.");
+            }
+          }}
         >
-          Download / Print Order
+          Download Order
         </button>
 
         {/* =========================

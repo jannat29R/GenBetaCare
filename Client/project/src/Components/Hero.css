@@ -1,0 +1,300 @@
+/* =========================
+   HERO
+========================= */
+
+.hero-section {
+  background: #f8f9fa;
+  padding: 60px 8%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hero-container {
+  max-width: 1300px;
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 60px;
+}
+
+
+/* =========================
+   LEFT CONTENT
+========================= */
+
+.hero-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.hero-small-title {
+  color: #2e8b57;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin: 0;
+}
+
+.hero-content h1 {
+  font-size: 52px;
+  line-height: 1.15;
+  margin: 20px 0;
+  color: #222;
+}
+
+.hero-description {
+  color: #666;
+  line-height: 30px;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hero-buttons a {
+  text-decoration: none;
+}
+
+.hero-buttons button {
+  padding: 14px 28px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.shop-btn {
+  background: #2e8b57;
+}
+
+.learn-btn {
+  background: #d4b07d;
+}
+
+.shop-btn:hover,
+.learn-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+
+/* =========================
+   RIGHT IMAGE
+========================= */
+
+.hero-image-area {
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+}
+
+.hero-product-image {
+  width: 450px;
+  height: 450px;
+
+  max-width: 100%;
+
+  object-fit: contain;
+  cursor: pointer;
+
+  transition: 0.4s;
+}
+
+.hero-product-image:hover {
+  transform: scale(1.03);
+}
+
+
+/* =========================
+   DOTS
+========================= */
+
+.hero-dots {
+  margin-top: 20px;
+
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.hero-dot {
+  width: 12px;
+  height: 12px;
+
+  border-radius: 50%;
+  background: #ccc;
+}
+
+.hero-dot.active {
+  background: #2e8b57;
+}
+
+
+/* =================================================
+   TABLET
+   621px - 900px
+================================================= */
+
+@media (max-width: 900px) {
+
+  .hero-section {
+    padding: 45px 5%;
+  }
+
+  .hero-container {
+    gap: 30px;
+  }
+
+  .hero-content h1 {
+    font-size: 40px;
+  }
+
+  .hero-description {
+    line-height: 26px;
+  }
+
+  .hero-product-image {
+    width: 350px;
+    height: 350px;
+  }
+}
+
+
+/* =================================================
+   MOBILE
+   620px AND BELOW
+
+   TEXT FIRST
+   IMAGE SECOND
+================================================= */
+
+@media (max-width: 620px) {
+
+  .hero-section {
+    padding: 35px 20px;
+  }
+
+  .hero-container {
+    flex-direction: column;
+
+    gap: 25px;
+
+    text-align: center;
+  }
+
+
+  /* TEXT COMES FIRST */
+  .hero-content {
+    width: 100%;
+    order: 1;
+  }
+
+  .hero-small-title {
+    font-size: 13px;
+    letter-spacing: 1.5px;
+  }
+
+  .hero-content h1 {
+    font-size: 32px;
+    line-height: 1.2;
+
+    margin: 15px 0;
+  }
+
+  .hero-description {
+    font-size: 14px;
+    line-height: 24px;
+
+    margin: 0 auto 25px;
+    max-width: 500px;
+  }
+
+
+  /* BUTTONS */
+  .hero-buttons {
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .hero-buttons button {
+    padding: 11px 20px;
+    font-size: 14px;
+  }
+
+
+  /* IMAGE COMES AFTER TEXT */
+  .hero-image-area {
+    width: 100%;
+    order: 2;
+  }
+
+  .hero-product-image {
+    width: min(300px, 85vw);
+    height: min(300px, 85vw);
+  }
+
+
+  /* DOTS */
+  .hero-dots {
+    margin-top: 12px;
+  }
+
+  .hero-dot {
+    width: 9px;
+    height: 9px;
+  }
+}
+
+
+/* =================================================
+   SMALL MOBILE
+   400px AND BELOW
+================================================= */
+
+@media (max-width: 400px) {
+
+  .hero-section {
+    padding: 28px 15px;
+    align-items: center;
+  }
+
+  .hero-content h1 {
+    font-size: 27px;
+  }
+
+  .hero-small-title {
+    font-size: 11px;
+  }
+
+  .hero-description {
+    font-size: 13px;
+    line-height: 22px;
+  }
+
+  .hero-buttons {
+    gap: 8px;
+  }
+
+  .hero-buttons button {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .hero-product-image {
+    width: 240px;
+    height: 240px;
+  }
+}

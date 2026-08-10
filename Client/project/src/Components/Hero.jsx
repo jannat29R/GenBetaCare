@@ -6,8 +6,9 @@ import img2 from "../assets/product/p2.jpg";
 import img3 from "../assets/product/p3.jpg";
 import img4 from "../assets/product/p5.jpg";
 
-export default function Hero() {
+import "../Components/Hero.css";
 
+export default function Hero() {
   const ads = [
     { id: 1, image: img1 },
     { id: 2, image: img2 },
@@ -18,102 +19,44 @@ export default function Hero() {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-
     const interval = setInterval(() => {
-
       setCurrent((prev) => (prev + 1) % ads.length);
-
     }, 3000);
 
     return () => clearInterval(interval);
-
   }, []);
 
   return (
+    <section className="hero-section">
 
-    <section
-      style={{
-        background: "#f8f9fa",
-        padding: "60px 8%",
-      }}
-    >
+      <div className="hero-container">
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "60px",
-        }}
-      >
+        {/* LEFT - TEXT */}
+        <div className="hero-content">
 
-        {/* Left */}
-
-        <div style={{ flex: 1 }}>
-
-          <p
-            style={{
-              color: "#2E8B57",
-              fontWeight: "bold",
-              letterSpacing: "2px",
-            }}
-          >
+          <p className="hero-small-title">
             WELCOME TO GENBETACARE
           </p>
 
-          <h1
-            style={{
-              fontSize: "52px",
-              margin: "20px 0",
-              color: "#222",
-            }}
-          >
+          <h1>
             Trusted Babycare Products
           </h1>
 
-          <p
-            style={{
-              color: "#666",
-              lineHeight: "30px",
-              marginBottom: "30px",
-            }}
-          >
-            From first smiles to every mile, Caring for your little one with a gentle smile.
+          <p className="hero-description">
+            From first smiles to every mile, Caring for your little one
+            with a gentle smile.
           </p>
 
-          <div
-            style={{
-              display: "flex",
-              gap: "20px",
-            }}
-          >
+          <div className="hero-buttons">
 
             <Link to="/products">
-              <button
-                style={{
-                  padding: "14px 28px",
-                  background: "#2E8B57",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                }}
-              >
+              <button className="shop-btn">
                 Shop Now
               </button>
             </Link>
 
             <Link to="/about">
-              <button
-                style={{
-                  padding: "14px 28px",
-                  background: "#d4b07d",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                }}
-              >
+              <button className="learn-btn">
                 Learn More
               </button>
             </Link>
@@ -122,53 +65,32 @@ export default function Hero() {
 
         </div>
 
-        {/* Right */}
 
-        <div
-          style={{
-            flex: 1,
-            textAlign: "center",
-          }}
-        >
+        {/* RIGHT - IMAGE */}
+        <div className="hero-image-area">
 
           <Link to={`/product/${ads[current].id}`}>
 
             <img
               src={ads[current].image}
-              alt="Advertisement"
-              style={{
-                width: "450px",
-                height: "450px",
-                objectFit: "contain",
-                cursor: "pointer",
-                transition: ".4s",
-              }}
+              alt="GenBetaCare Product"
+              className="hero-product-image"
             />
 
           </Link>
 
-          <div
-            style={{
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "center",
-              gap: "10px",
-            }}
-          >
+          {/* DOTS */}
+          <div className="hero-dots">
 
             {ads.map((_, index) => (
-
               <span
                 key={index}
-                style={{
-                  width: "12px",
-                  height: "12px",
-                  borderRadius: "50%",
-                  background:
-                    current === index ? "#2E8B57" : "#ccc",
-                }}
+                className={
+                  current === index
+                    ? "hero-dot active"
+                    : "hero-dot"
+                }
               ></span>
-
             ))}
 
           </div>
@@ -178,6 +100,5 @@ export default function Hero() {
       </div>
 
     </section>
-
   );
 }
