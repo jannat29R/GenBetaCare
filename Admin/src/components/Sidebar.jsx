@@ -121,10 +121,16 @@ export default function Sidebar() {
             Messages
           </Link>
           <div>
-            <button className="logout-btn" onClick={() => {
-              window.location.href = "/admin/login";
-            }}>
-              Logout  
+            <button
+              className="logout-btn"
+              onClick={() => {
+                localStorage.removeItem("adminToken");
+                localStorage.removeItem("admin");
+
+                window.location.href = "/admin/login";
+              }}
+            >
+              Logout
             </button>
           </div>
 

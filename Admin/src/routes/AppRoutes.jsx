@@ -1,12 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-
 import AdminLayout from "../layouts/AdminLayout";
-
 import Dashboard from "../pages/Dashboard";
 import Products from "../pages/Products";
 import Orders from "../pages/Orders";
 import Messages from "../pages/Messages";
 import Login from "../pages/Login";
+import AdminProtectedRoute from "../components/AdminProtectedRoute";
 
 export default function AppRoutes() {
   return (
@@ -28,7 +27,11 @@ export default function AppRoutes() {
         {/* Admin Layout */}
         <Route
           path="/admin"
-          element={<AdminLayout />}
+          element={
+            <AdminProtectedRoute>
+              <AdminLayout />
+            </AdminProtectedRoute>
+          }
         >
           {/* /admin */}
           <Route
