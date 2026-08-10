@@ -632,20 +632,64 @@ export default function CheckoutPage() {
 
               const pdf = new jsPDF("p", "mm", "a4");
 
-              const pdfWidth = 190;
-              const pdfHeight =
-                (canvas.height * pdfWidth) / canvas.width;
+              const pageWidth =
+                pdf.internal.pageSize.getWidth();
 
+              const pageHeight =
+                pdf.internal.pageSize.getHeight();
+
+              const margin = 10;
+
+              const pdfWidth =
+                pageWidth - margin * 2;
+
+              const imgHeight =
+                (canvas.height * pdfWidth) /
+                canvas.width;
+
+              let heightLeft = imgHeight;
+
+              let position = margin;
+
+              // First page
               pdf.addImage(
                 imgData,
                 "PNG",
-                10,
-                10,
+                margin,
+                position,
                 pdfWidth,
-                pdfHeight
+                imgHeight
               );
 
-              pdf.save(`GenBetaCare-${orderId}.pdf`);
+              heightLeft -=
+                pageHeight - margin * 2;
+
+              // Extra pages
+              while (heightLeft > 0) {
+
+                position =
+                  heightLeft -
+                  imgHeight +
+                  margin;
+
+                pdf.addPage();
+
+                pdf.addImage(
+                  imgData,
+                  "PNG",
+                  margin,
+                  position,
+                  pdfWidth,
+                  imgHeight
+                );
+
+                heightLeft -=
+                  pageHeight - margin * 2;
+              }
+
+              pdf.save(
+                `GenBetaCare-${orderId}.pdf`
+              );
 
             } catch (error) {
               console.error("PDF error:", error);
