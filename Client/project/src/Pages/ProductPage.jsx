@@ -10,23 +10,13 @@ import "./ProductPage.css";
 export default function ProductPage() {
 
   const [products, setProducts] = useState([]);
-
-  const [filteredProducts, setFilteredProducts] =
-    useState([]);
-
   const [search, setSearch] = useState("");
-
   const [category, setCategory] = useState("");
-
   const [loading, setLoading] = useState(true);
 
-
-  // Get category from URL
   const [searchParams] = useSearchParams();
 
-  const urlCategory =
-    searchParams.get("category") || "";
-
+  const urlCategory = searchParams.get("category") || "";
 
   // =========================
   // FETCH PRODUCTS
@@ -38,13 +28,15 @@ export default function ProductPage() {
 
       try {
 
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/products`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/products`
+        );
 
         setProducts(res.data);
 
       } catch (error) {
 
-        console.log(error);
+        console.log("Error fetching products:", error);
 
       } finally {
 
@@ -60,7 +52,7 @@ export default function ProductPage() {
 
 
   // =========================
-  // SET CATEGORY FROM HOME
+  // SET CATEGORY FROM URL
   // =========================
 
   useEffect(() => {
@@ -71,79 +63,80 @@ export default function ProductPage() {
 
 
   // =========================
+  // DYNAMIC CATEGORIES
+  // =========================
+  // Admin নতুন category-এর product
+  // add করলে automatically এখানে আসবে
+
+  const categories = [
+    ...new Set(
+      products
+        .map((product) => product.category)
+        .filter(Boolean)
+    )
+  ];
+
+
+  // =========================
   // SEARCH + CATEGORY FILTER
   // =========================
 
-  useEffect(() => {
+  const filteredProducts = products.filter((product) => {
 
-    let result = [...products];
+    const matchesSearch =
+      search.trim() === "" ||
+      product.name
+        ?.toLowerCase()
+        .includes(search.toLowerCase());
 
+    const matchesCategory =
+      category === "" ||
+      product.category === category;
 
-    // Search
+    return matchesSearch && matchesCategory;
 
-    if (search.trim() !== "") {
-
-      result = result.filter(
-        (product) =>
-          product.name
-            ?.toLowerCase()
-            .includes(
-              search.toLowerCase()
-            )
-      );
-
-    }
+  });
 
 
-    // Category
+  // =========================
+  // GROUP PRODUCTS BY CATEGORY
+  // =========================
 
-    if (category !== "") {
+  const groupedProducts = categories.map((cat) => {
 
-      result = result.filter(
-        (product) =>
-          product.category === category
-      );
+    const categoryProducts = filteredProducts.filter(
+      (product) => product.category === cat
+    );
 
-    }
+    return {
+      category: cat,
+      products: categoryProducts
+    };
 
-
-    setFilteredProducts(result);
-
-  }, [
-    search,
-    category,
-    products,
-  ]);
+  });
 
 
   return (
 
     <div className="product-page">
 
-
-      {/* SEARCH + CATEGORY */}
+      {/* =========================
+          SEARCH
+      ========================= */}
 
       <SearchBar
-
         search={search}
-
         setSearch={setSearch}
-
         category={category}
-
         setCategory={setCategory}
-
         products={products}
-
       />
 
 
-      <h1 className="products-title">
-        {category
-          ? category
-          : "All Products"}
-      </h1>
 
+      {/* =========================
+          LOADING
+      ========================= */}
 
       {loading ? (
 
@@ -157,20 +150,91 @@ export default function ProductPage() {
           No Products Found
         </h2>
 
-      ) : (
+      ) : category !== "" ? (
 
-        <div className="products-grid">
+        /* =========================
+           FILTERED CATEGORY
+        ========================= */
 
-          {filteredProducts.map(
-            (product) => (
+        <section className="category-section">
+
+          <h2 className="category-title">
+            {category}
+          </h2>
+
+          <div className="products-grid">
+
+            {filteredProducts.map((product) => (
 
               <ProductCard
                 key={product._id}
                 product={product}
               />
 
-            )
-          )}
+            ))}
+
+          </div>
+
+        </section>
+
+      ) : (
+
+        /* =========================
+           ALL PRODUCTS
+           CATEGORY WISE
+        ========================= */
+
+        <div className="all-products-sections">
+
+          {groupedProducts.map((group) => {
+
+            if (group.products.length === 0) {
+              return null;
+            }
+
+            return (
+
+              <section
+                className="category-section"
+                key={group.category}
+              >
+
+                <div className="category-heading-row">
+
+                  <h2 className="category-title">
+                    {group.category}
+                  </h2>
+
+                  <button
+                    className="view-category-btn"
+                    onClick={() =>
+                      setCategory(group.category)
+                    }
+                  >
+                    View All
+                  </button>
+
+                </div>
+
+
+                <div className="products-grid">
+
+                  {group.products.map((product) => (
+
+                    <ProductCard
+                      key={product._id}
+                      product={product}
+                    />
+
+                  ))}
+
+                </div>
+
+              </section>
+
+            );
+
+          })}
 
         </div>
 
