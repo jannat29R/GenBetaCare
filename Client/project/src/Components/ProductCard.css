@@ -76,15 +76,27 @@
     position: absolute;
     top: 15px;
     right: 15px;
+
     width: 42px;
     height: 42px;
+
     border: none;
     border-radius: 50%;
+
     background: white;
     cursor: pointer;
+
     font-size: 18px;
-    transition: 0.3s;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+    transition: 0.3s;
+
+    z-index: 10;
 }
 
 .wishlist-btn:hover {
