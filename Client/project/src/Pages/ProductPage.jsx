@@ -18,10 +18,6 @@ export default function ProductPage() {
 
   const urlCategory = searchParams.get("category") || "";
 
-  // =========================
-  // FETCH PRODUCTS
-  // =========================
-
   useEffect(() => {
 
     const fetchProducts = async () => {
@@ -50,23 +46,11 @@ export default function ProductPage() {
 
   }, []);
 
-
-  // =========================
-  // SET CATEGORY FROM URL
-  // =========================
-
   useEffect(() => {
 
     setCategory(urlCategory);
 
   }, [urlCategory]);
-
-
-  // =========================
-  // DYNAMIC CATEGORIES
-  // =========================
-  // Admin নতুন category-এর product
-  // add করলে automatically এখানে আসবে
 
   const categories = [
     ...new Set(
@@ -75,11 +59,6 @@ export default function ProductPage() {
         .filter(Boolean)
     )
   ];
-
-
-  // =========================
-  // SEARCH + CATEGORY FILTER
-  // =========================
 
   const filteredProducts = products.filter((product) => {
 
@@ -97,10 +76,6 @@ export default function ProductPage() {
 
   });
 
-
-  // =========================
-  // GROUP PRODUCTS BY CATEGORY
-  // =========================
 
   const groupedProducts = categories.map((cat) => {
 
@@ -120,9 +95,7 @@ export default function ProductPage() {
 
     <div className="product-page">
 
-      {/* =========================
-          SEARCH
-      ========================= */}
+ 
 
       <SearchBar
         search={search}
@@ -132,11 +105,6 @@ export default function ProductPage() {
         products={products}
       />
 
-
-
-      {/* =========================
-          LOADING
-      ========================= */}
 
       {loading ? (
 
@@ -151,10 +119,6 @@ export default function ProductPage() {
         </h2>
 
       ) : category !== "" ? (
-
-        /* =========================
-           FILTERED CATEGORY
-        ========================= */
 
         <section className="category-section">
 
@@ -179,10 +143,6 @@ export default function ProductPage() {
 
       ) : (
 
-        /* =========================
-           ALL PRODUCTS
-           CATEGORY WISE
-        ========================= */
 
         <div className="all-products-sections">
 

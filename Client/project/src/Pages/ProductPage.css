@@ -1,6 +1,3 @@
-/* =========================
-   PRODUCT PAGE
-========================= */
 
 .product-page {
   width: 92%;
@@ -9,9 +6,6 @@
 }
 
 
-/* =========================
-   CATEGORY BAR
-========================= */
 
 .category-bar {
   display: flex;
@@ -29,7 +23,6 @@
 }
 
 
-/* Chrome / Edge scrollbar */
 
 .category-bar::-webkit-scrollbar {
   height: 6px;
@@ -45,9 +38,6 @@
 }
 
 
-/* =========================
-   CATEGORY BUTTON
-========================= */
 
 .category-btn {
   flex-shrink: 0;
@@ -87,18 +77,11 @@
 }
 
 
-/* =========================
-   CATEGORY SECTION
-========================= */
 
 .category-section {
   margin-bottom: 45px;
 }
 
-
-/* =========================
-   CATEGORY HEADING
-========================= */
 
 .category-heading-row {
   display: flex;
@@ -122,9 +105,6 @@
 }
 
 
-/* =========================
-   VIEW ALL
-========================= */
 
 .view-category-btn {
   border: none;
@@ -146,10 +126,6 @@
 }
 
 
-/* =========================
-   PRODUCTS GRID
-========================= */
-
 .products-grid {
   display: grid;
 
@@ -160,9 +136,6 @@
 }
 
 
-/* =========================
-   LOADING
-========================= */
 
 .products-loading,
 .no-products {
@@ -174,10 +147,6 @@
 }
 
 
-/* =========================
-   TABLET
-========================= */
-
 @media (max-width: 1000px) {
 
   .products-grid {
@@ -186,11 +155,6 @@
   }
 
 }
-
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 700px) {
 
@@ -224,11 +188,6 @@
   }
 
 }
-
-
-/* =========================
-   SMALL MOBILE
-========================= */
 
 @media (max-width: 430px) {
 
