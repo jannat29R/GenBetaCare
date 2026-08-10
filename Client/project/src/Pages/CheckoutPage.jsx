@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCheckCircle, FaTimes } from "react-icons/fa";
+import {
+  FaCheckCircle,
+  FaTimes,
+} from "react-icons/fa";
 import axios from "axios";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+
+import {
+  downloadOrderPdf,
+} from "../utils/downloadOrderPdf";
 
 import "./CheckoutPage.css";
 
@@ -14,46 +19,58 @@ export default function CheckoutPage() {
   // CHECKOUT PRODUCTS
   // =========================
 
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] =
+    useState([]);
 
-  // Products shown after successful order
-  const [confirmedProducts, setConfirmedProducts] = useState([]);
+  const [confirmedProducts, setConfirmedProducts] =
+    useState([]);
 
   // =========================
   // CUSTOMER
   // =========================
 
-  const [customer, setCustomer] = useState({
-    name: "",
-    phone: "",
-    address: "",
-    area: "",
-  });
+  const [customer, setCustomer] =
+    useState({
+      name: "",
+      phone: "",
+      address: "",
+      area: "",
+    });
 
   // =========================
   // OTHER STATES
   // =========================
 
-  const [deliveryCharge, setDeliveryCharge] = useState(0);
-  const [orderConfirmed, setOrderConfirmed] = useState(false);
-  const [orderId, setOrderId] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+  const [deliveryCharge, setDeliveryCharge] =
+    useState(0);
+
+  const [orderConfirmed, setOrderConfirmed] =
+    useState(false);
+
+  const [orderId, setOrderId] =
+    useState("");
+
+  const [submitting, setSubmitting] =
+    useState(false);
 
   // =====================================================
   // LOAD CHECKOUT PRODUCTS
   // =====================================================
 
   useEffect(() => {
-    const savedItems = localStorage.getItem("checkoutItems");
+    const savedItems =
+      localStorage.getItem(
+        "checkoutItems"
+      );
 
-    // No checkout data
     if (!savedItems) {
       setProducts([]);
       return;
     }
 
     try {
-      const parsedItems = JSON.parse(savedItems);
+      const parsedItems =
+        JSON.parse(savedItems);
 
       if (
         Array.isArray(parsedItems) &&
@@ -63,14 +80,21 @@ export default function CheckoutPage() {
       } else {
         setProducts([]);
 
-        localStorage.removeItem("checkoutItems");
+        localStorage.removeItem(
+          "checkoutItems"
+        );
       }
     } catch (error) {
-      console.log("Checkout data error:", error);
+      console.log(
+        "Checkout data error:",
+        error
+      );
 
       setProducts([]);
 
-      localStorage.removeItem("checkoutItems");
+      localStorage.removeItem(
+        "checkoutItems"
+      );
     }
   }, []);
 
@@ -79,7 +103,10 @@ export default function CheckoutPage() {
   // =====================================================
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value,
+    } = e.target;
 
     setCustomer((prev) => ({
       ...prev,
@@ -92,7 +119,8 @@ export default function CheckoutPage() {
   // =====================================================
 
   const handleAreaChange = (e) => {
-    const value = e.target.value;
+    const value =
+      e.target.value;
 
     setCustomer((prev) => ({
       ...prev,
@@ -101,7 +129,9 @@ export default function CheckoutPage() {
 
     if (value === "inside") {
       setDeliveryCharge(60);
-    } else if (value === "outside") {
+    } else if (
+      value === "outside"
+    ) {
       setDeliveryCharge(120);
     } else {
       setDeliveryCharge(0);
@@ -112,13 +142,14 @@ export default function CheckoutPage() {
   // SUBTOTAL
   // =====================================================
 
-  const subtotal = products.reduce(
-    (sum, product) =>
-      sum +
-      Number(product.price) *
-        (product.quantity || 1),
-    0
-  );
+  const subtotal =
+    products.reduce(
+      (sum, product) =>
+        sum +
+        Number(product.price) *
+          (product.quantity || 1),
+      0
+    );
 
   // =====================================================
   // GRAND TOTAL
@@ -132,12 +163,12 @@ export default function CheckoutPage() {
   // =====================================================
 
   const handleCloseCheckout = () => {
-    const confirmClose = window.confirm(
-      "Are you sure you want to cancel this order?"
-    );
+    const confirmClose =
+      window.confirm(
+        "Are you sure you want to cancel this order?"
+      );
 
     if (confirmClose) {
-      // Cancel checkout
       localStorage.removeItem(
         "checkoutItems"
       );
@@ -150,10 +181,11 @@ export default function CheckoutPage() {
   // CONFIRM ORDER
   // =====================================================
 
-  const handleConfirmOrder = async (e) => {
+  const handleConfirmOrder = async (
+    e
+  ) => {
     e.preventDefault();
 
-    // Prevent double click
     if (submitting) {
       return;
     }
@@ -214,7 +246,6 @@ export default function CheckoutPage() {
     try {
       setSubmitting(true);
 
-      // Generate order ID
       const newOrderId =
         "GB-" +
         Date.now()
@@ -229,60 +260,81 @@ export default function CheckoutPage() {
         orderId: newOrderId,
 
         customer: {
-          name: customer.name.trim(),
-          phone: customer.phone.trim(),
-          address: customer.address.trim(),
-          area: customer.area,
+          name:
+            customer.name.trim(),
+
+          phone:
+            customer.phone.trim(),
+
+          address:
+            customer.address.trim(),
+
+          area:
+            customer.area,
         },
 
-        products: products.map(
-          (product) => ({
-            productId: product._id,
-            name: product.name,
-            image: product.image,
-            price: Number(product.price),
-            quantity:
-              product.quantity || 1,
-          })
-        ),
+        products:
+          products.map(
+            (product) => ({
+              productId:
+                product._id,
 
-        subtotal: subtotal,
+              name:
+                product.name,
+
+              image:
+                product.image,
+
+              price:
+                Number(product.price),
+
+              quantity:
+                product.quantity || 1,
+            })
+          ),
+
+        subtotal:
+          subtotal,
 
         deliveryCharge:
           deliveryCharge,
 
-        total: grandTotal,
+        total:
+          grandTotal,
 
         paymentMethod:
           "Cash on Delivery",
 
-        status: "Pending",
+        status:
+          "Pending",
       };
 
       // =========================
       // SEND TO BACKEND
       // =========================
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/orders`,
-        orderData
-      );
+      const res =
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/orders`,
+          orderData
+        );
 
       // =========================
       // SUCCESS
       // =========================
 
       if (res.data.success) {
-        // IMPORTANT:
-        // Save products separately
-        // for confirmation page
         setConfirmedProducts([
           ...products,
         ]);
 
-        setOrderId(newOrderId);
+        setOrderId(
+          newOrderId
+        );
 
-        setOrderConfirmed(true);
+        setOrderConfirmed(
+          true
+        );
 
         // =========================
         // SAVE LATEST ORDER
@@ -299,12 +351,13 @@ export default function CheckoutPage() {
 
         // =========================
         // REMOVE PURCHASED ITEMS
-        // FROM CART
         // =========================
 
         const currentCart =
           JSON.parse(
-            localStorage.getItem("cart")
+            localStorage.getItem(
+              "cart"
+            )
           ) || [];
 
         const updatedCart =
@@ -317,8 +370,9 @@ export default function CheckoutPage() {
                     cartProduct._id
                 );
 
-              // Product wasn't purchased
-              if (!checkoutProduct) {
+              if (
+                !checkoutProduct
+              ) {
                 return true;
               }
 
@@ -327,14 +381,17 @@ export default function CheckoutPage() {
                 1;
 
               const cartQuantity =
-                cartProduct.quantity || 1;
+                cartProduct.quantity ||
+                1;
 
               const remainingQuantity =
                 cartQuantity -
                 checkoutQuantity;
 
-              // Keep only if quantity remains
-              return remainingQuantity > 0;
+              return (
+                remainingQuantity >
+                0
+              );
             }
           );
 
@@ -352,7 +409,9 @@ export default function CheckoutPage() {
                     cartProduct._id
                 );
 
-              if (!checkoutProduct) {
+              if (
+                !checkoutProduct
+              ) {
                 return cartProduct;
               }
 
@@ -366,6 +425,7 @@ export default function CheckoutPage() {
 
               return {
                 ...cartProduct,
+
                 quantity:
                   originalQuantity -
                   checkoutQuantity,
@@ -375,24 +435,20 @@ export default function CheckoutPage() {
 
         localStorage.setItem(
           "cart",
-          JSON.stringify(finalCart)
+          JSON.stringify(
+            finalCart
+          )
         );
 
         // =========================
-        // VERY IMPORTANT
-        // CLEAR CHECKOUT DATA
+        // CLEAR CHECKOUT
         // =========================
 
         localStorage.removeItem(
           "checkoutItems"
         );
-
-        // DO NOT:
-        // setProducts([])
-        //
-        // because confirmation
-        // needs the products.
       }
+
     } catch (error) {
       console.log(
         "Order error:",
@@ -400,9 +456,11 @@ export default function CheckoutPage() {
       );
 
       alert(
-        error.response?.data?.message ||
+        error.response?.data
+          ?.message ||
           "Failed to place order. Please try again."
       );
+
     } finally {
       setSubmitting(false);
     }
@@ -418,13 +476,16 @@ export default function CheckoutPage() {
   ) {
     return (
       <div className="checkout-page">
-       <div
+        <div
           className="empty-checkout"
           style={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            flexDirection:
+              "column",
+            justifyContent:
+              "center",
+            alignItems:
+              "center",
           }}
         >
           <h2>
@@ -432,17 +493,18 @@ export default function CheckoutPage() {
           </h2>
 
           <p>
-            Please select products from
-            your cart before checkout.
+            Please select products
+            from your cart before
+            checkout.
           </p>
 
           <button
             onClick={() =>
-              navigate("/cart")
+              navigate("/products")
             }
             className="confirm-order-btn"
           >
-            Go to Cart
+            Go to Product
           </button>
         </div>
       </div>
@@ -454,7 +516,6 @@ export default function CheckoutPage() {
   // =====================================================
 
   if (orderConfirmed) {
-    // Calculate confirmation subtotal
     const confirmedSubtotal =
       confirmedProducts.reduce(
         (sum, product) =>
@@ -486,8 +547,8 @@ export default function CheckoutPage() {
           </h1>
 
           <p className="thank-you">
-            Thank you for shopping with
-            GenBetaCare ❤️
+            Thank you for shopping
+            with GenBetaCare ❤️
           </p>
 
           {/* ORDER ID */}
@@ -553,13 +614,17 @@ export default function CheckoutPage() {
                 >
                   <span>
                     {product.name} ×{" "}
-                    {product.quantity || 1}
+                    {product.quantity ||
+                      1}
                   </span>
 
                   <span>
                     ৳{" "}
-                    {Number(product.price) *
-                      (product.quantity || 1)}
+                    {Number(
+                      product.price
+                    ) *
+                      (product.quantity ||
+                        1)}
                   </span>
                 </div>
               )
@@ -575,7 +640,8 @@ export default function CheckoutPage() {
               </span>
 
               <span>
-                ৳ {confirmedSubtotal}
+                ৳{" "}
+                {confirmedSubtotal}
               </span>
             </div>
 
@@ -585,7 +651,8 @@ export default function CheckoutPage() {
               </span>
 
               <span>
-                ৳ {deliveryCharge}
+                ৳{" "}
+                {deliveryCharge}
               </span>
             </div>
 
@@ -595,7 +662,8 @@ export default function CheckoutPage() {
               </span>
 
               <span>
-                ৳ {confirmedGrandTotal}
+                ৳{" "}
+                {confirmedGrandTotal}
               </span>
             </div>
           </div>
@@ -611,91 +679,17 @@ export default function CheckoutPage() {
         </div>
 
         {/* =========================
-            PRINT
+            DOWNLOAD
         ========================= */}
 
         <button
           className="download-btn"
-          onClick={async () => {
-            const invoice = document.getElementById("order-invoice");
-
-            if (!invoice) return;
-
-            try {
-              const canvas = await html2canvas(invoice, {
-                scale: 2,
-                useCORS: true,
-                backgroundColor: "#ffffff",
-              });
-
-              const imgData = canvas.toDataURL("image/png");
-
-              const pdf = new jsPDF("p", "mm", "a4");
-
-              const pageWidth =
-                pdf.internal.pageSize.getWidth();
-
-              const pageHeight =
-                pdf.internal.pageSize.getHeight();
-
-              const margin = 10;
-
-              const pdfWidth =
-                pageWidth - margin * 2;
-
-              const imgHeight =
-                (canvas.height * pdfWidth) /
-                canvas.width;
-
-              let heightLeft = imgHeight;
-
-              let position = margin;
-
-              // First page
-              pdf.addImage(
-                imgData,
-                "PNG",
-                margin,
-                position,
-                pdfWidth,
-                imgHeight
-              );
-
-              heightLeft -=
-                pageHeight - margin * 2;
-
-              // Extra pages
-              while (heightLeft > 0) {
-
-                position =
-                  heightLeft -
-                  imgHeight +
-                  margin;
-
-                pdf.addPage();
-
-                pdf.addImage(
-                  imgData,
-                  "PNG",
-                  margin,
-                  position,
-                  pdfWidth,
-                  imgHeight
-                );
-
-                heightLeft -=
-                  pageHeight - margin * 2;
-              }
-
-              pdf.save(
-                `GenBetaCare-${orderId}.pdf`
-              );
-
-            } catch (error) {
-              console.error("PDF error:", error);
-              alert("Could not download order.");
-            }
-          }}
+          onClick={() =>
+            downloadOrderPdf(
+              "order-invoice",
+              orderId
+            )
+          }
         >
           Download Order
         </button>
@@ -712,6 +706,7 @@ export default function CheckoutPage() {
         >
           Back to Home
         </button>
+
       </div>
     );
   }
@@ -913,7 +908,9 @@ export default function CheckoutPage() {
                 >
 
                   <img
-                    src={product.image}
+                    src={
+                      product.image
+                    }
                     alt={
                       product.name
                     }
