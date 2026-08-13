@@ -1,20 +1,36 @@
 import Product from "../models/Product.js";
 import cloudinary from "../config/cloudinary.js";
-import fs from "fs";
 
 export const addProduct = async (req, res) => {
   console.log("BODY:", req.body);
   console.log("FILE:", req.file);
+
   try {
     const { name, price, category, stock } = req.body;
 
-    // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "GenBetaCare/products",
-    });
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Product image is required",
+      });
+    }
 
-    // Delete local image
-    fs.unlinkSync(req.file.path);
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: "GenBetaCare/products",
+        },
+        (error, result) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+
+      stream.end(req.file.buffer);
+    });
 
     const product = await Product.create({
       name,
@@ -31,7 +47,7 @@ export const addProduct = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+    console.log("ADD PRODUCT ERROR:", error);
 
     res.status(500).json({
       success: false,
