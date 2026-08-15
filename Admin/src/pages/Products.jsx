@@ -34,6 +34,11 @@ export default function Products() {
     loadProducts();
   }, []);
 
+  const CATEGORY_OPTIONS = [
+  "Baby Food",
+  "Baby Essential",
+  "Baby Care",
+];
   // =========================
   // IMAGE SELECT
   // =========================
@@ -384,15 +389,26 @@ export default function Products() {
 
             {/* CATEGORY */}
 
-            <input
-              type="text"
-              placeholder="Category"
+            <select
               value={category}
               onChange={(e) =>
                 setCategory(e.target.value)
               }
               required
-            />
+            >
+              <option value="">
+                Select Category
+              </option>
+
+              {CATEGORY_OPTIONS.map((cat) => (
+                <option
+                  value={cat}
+                  key={cat}
+                >
+                  {cat}
+                </option>
+              ))}
+            </select>
 
 
             {/* STOCK */}

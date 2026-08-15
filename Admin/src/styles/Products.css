@@ -17,6 +17,38 @@
     /* vertical scroll */
     overflow-y: auto;
 }
+/* =========================
+   CATEGORY SELECT
+========================= */
+
+.product-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  color: #333;
+  font-size: 15px;
+  outline: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: 0.2s;
+}
+
+.product-form select:focus {
+  border-color: #2e8b57;
+  box-shadow: 0 0 0 2px rgba(46, 139, 87, 0.1);
+}
+
+.product-form select:hover {
+  border-color: #2e8b57;
+}
+
+.product-form select option {
+  color: #333;
+  background: #fff;
+  padding: 10px;
+}
 
 
 /* =========================
