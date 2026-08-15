@@ -17,24 +17,37 @@ export default function SearchBar({
 
 
   // Get categories from products
-  useEffect(() => {
+ useEffect(() => {
 
-    const uniqueCategories = [
-      ...new Set(
-        products
-          .map(
-            (product) =>
-              product.category
-          )
-          .filter(Boolean)
-      ),
-    ];
+  const categoryMap = {};
 
-    setCategories(
-      uniqueCategories
-    );
+  products.forEach((product) => {
 
-  }, [products]);
+    if (!product.category) return;
+
+    const originalCategory =
+      product.category.trim();
+
+    if (!originalCategory) return;
+
+    const key =
+      originalCategory.toLowerCase();
+
+    if (!categoryMap[key]) {
+
+      categoryMap[key] =
+        originalCategory;
+
+    }
+
+  });
+
+  const uniqueCategories =
+    Object.values(categoryMap);
+
+  setCategories(uniqueCategories);
+
+}, [products]);
 
 
   return (
